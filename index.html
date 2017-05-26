@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>   
+    <meta charset="utf-8" />
+    <title>Clay Brimm Proj. 01</title>  
+    <link href="https://fonts.googleapis.com/css?family=Bungee|Bungee+Shade" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rubik" rel="stylesheet">
+    
+<!-- Check for browsers less than a specified version. 
+             Then redirect to download a modern browser. 
+             The next line, if, and endif must be formatted as specified.
+             Any variation will cause them to not work. -->
+          <!--[if lt IE 8 ]>
+            <script>
+              alert("You are using a browser lower than IE8. Please install a more modern browser!");
+              window.location = "http://outdatedbrowser.com/en";
+            </script>
+          <![endif]-->
+</head>
+
+<!--Style for site-->
+<style>
+    html{
+        background-image: url("media/background.png");
+        color:white;
+        text-align: center;
+    }
+    
+    h1{
+        font-family: 'Bungee Shade', cursive;
+        font-size: 60px;
+        text-align: center;
+        margin-bottom:50px;
+    }
+
+    p{
+        font-family: 'Rubik', sans-serif;
+        font-size:30px;
+        padding: 0;
+        margin-bottom:30px;
+    }
+
+    select {
+        padding: 5px 8px;
+        width: 35%;
+        border: none;
+        box-shadow: none;
+        background-image: none;
+        -webkit-appearance: none;
+        font-family: 'Roboto', sans-serif;
+        font-size: 20px;
+        margin-bottom: 40px;
+    }
+    
+    select:focus {
+        outline: none;
+        background-color: yellow;
+    }
+    
+    button{
+        background-color: deepskyblue;
+        color: antiquewhite;
+        border: none;
+        margin-left:10px;
+        width:150px;
+        height:70px;
+    }
+    
+    button:hover{
+        background-color:royalblue;
+    }
+
+</style>
+    
+<body onload ="Main()">
+    
+    <div id="myDiv"><h1>Welcome to Web Builder!</h1></div>
+    
+    <div>
+        <button type="button" onclick="location.reload()">Restart Web Builder.</button>
+    </div>
+    
+    <div id="history"></div>
+    
+    <script type="text/javascript">
+        
+        //declare some variables
+        var myObj, i, j, x = "";
+        var myarray = [];
+        var noGoArray = [];
+        var myDiv = document.getElementById("myDiv");
+        var aDiv = document.getElementById("history");
+        var selectList = document.createElement("select");        
+        var stuff;
+        var Search;
+        var user;
+    
+        //Create the data object
+        myObj = {
+            "questions": [
+                { "path":"start","text":"What year would you like your site to have been made in?","done":"false", "options":[ "-Select-","1997", "2017"]   },
+                { "path":"1997" ,"text":"What should the theme of the site be?","done":"false","options":[ "-Select-","Aliens", "Medieval Warfare"]},
+                { "path":"2017" ,"text":"What should this site be about?","done":"false","options":["-Select-", "Sloths", "Monster Trucks" ] },
+                { "path":"Aliens","text":"Do you want alien gifs or ufo gifs?","done":"false","options":["-Select-","aliens!","U.F.O.s!","BOTH!!"]},
+                { "path":"Medieval Warfare","text":"Would you like to have medieval gifs or medieval music?","done":"false","options":["-Select-","Music!","GIFS","GIMME BOTH!"]},
+                { "path":"Sloths", "text":"Would you like the site to have .gifs of sloths or a video of sloths?","done":"false","options":["-Select-","Sloth gifs please","Sloth videos please"]},
+                { "path":"Monster Trucks", "text":"Would you the site to have a video of monster trucks crushing stuff or monster trucks singing some tunes?","done":"false","options":["-Select-","Monster trucks crushing stuff!","Monster trucks singing some tunes!"]},
+                { "path":"aliens!","done":"true"},
+                { "path":"U.F.O.s!","done":"true"},
+                { "path":"BOTH!!","done":"true"},
+                { "path":"Music!","done":"true"},
+                { "path":"GIFS","done":"true"},
+                { "path":"GIMME BOTH","done":"true"},
+                { "path":"Sloth gifs please","done":"true"}, 
+                { "path":"Sloth videos please","done":"true"},
+                { "path":"Monster trucks crushing stuff!","done":"true"},
+                { "path":"Monster trucks singing some tunes!","done":"true"}]}
+        
+        function Main(){
+            User();
+            Local();
+            Populate("start");
+        }
+        
+        function User(answer1){
+            if (window.localStorage){
+                user = prompt('What is your name?');
+                if(answer1){
+                    //user = prompt('What is your name?');
+                    localStorage.setItem('name',user);
+                }
+                if(localStorage.getItem('name')){
+                    user = localStorage.getItem('pastSite');
+                }
+            }
+        }
+        
+        //This will use local storage to display what the last webpage was
+        function Local(past){
+             if (window.localStorage) {
+               if (past) {
+                    localStorage.setItem('pastSite', past);
+                }
+
+                if (localStorage.getItem('pastSite')) {
+                    Search = localStorage.getItem('pastSite');
+                    para = document.createElement("p");
+                    node = document.createTextNode("Hello "+user+"! The last page you visited was "+Search);
+                    para.appendChild(node);
+                    element = document.getElementById("history");
+                    element.appendChild(para);
+                }
+            }
+        }
+        
+        //creates a selectbox and populates it with options
+        function Populate(newPath){
+            //generate a random color for site header every second
+            var color = function getRandomColor() {
+                var letters = '0123456789ABCDEF'.split('');
+                var color = '#';
+                for (var i = 0; i < 6; i++ ) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
+            var bgcolor = document.body.style.color;
+            setInterval(function() { 
+                document.getElementsByTagName("h1")[0].style.color = color(); //() to execute the function!
+            }, 1000);
+            //this will create a new select box and fill it with options from the data object
+            tempPath= newPath;
+            stuff = tempPath;
+            selectList = document.createElement("select");
+            selectList.setAttribute("id", tempPath);
+            myDiv.appendChild(selectList);
+            var g = 0;
+            for (i in myObj.questions) {
+                for(j in myObj.questions[i].options){
+                    if(myObj.questions[i].path == tempPath){
+                        if(g == 0){
+                            para = document.createElement("p");
+                            node = document.createTextNode(myObj.questions[i].text);
+                            para.appendChild(node);
+                            var element = document.getElementById("myDiv");
+                            element.appendChild(para);
+                        }
+                        g++;
+                        var option = document.createElement("option");
+                        option.setAttribute("value", [i]);
+                        selectList.setAttribute("onchange","update()");
+                        option.text = myObj.questions[i].options[j];
+                        selectList.appendChild(option);
+                        myDiv.appendChild(selectList);
+            }}}}
+        
+        //This will make sure that there are more questions and it will choose the correct path for populate
+        function update(){
+            picked = document.getElementById(stuff);
+            pickedText = picked.options[picked.selectedIndex].text;
+            noGoArray.push(pickedText);
+            att = document.getElementsByTagName("select");
+            console.log(pickedText,picked);
+            match = false;
+            if (document.getElementById(stuff).selectedIndex != 0){
+                for (i in myObj.questions) {
+                    for(j in myObj.questions[i].options){
+                        if(myObj.questions[i].path == pickedText){
+                            myarray.push(pickedText);
+                            console.log("picked: "+pickedText);
+                            console.log(myObj.questions[i].done);
+                            op = document.getElementById(stuff).getElementsByTagName("option");
+                            console.log(op.length);
+                            Populate(pickedText);
+                            /**
+                            This will make it so that once you select from a select box it will disable the box so you cannot make more changes
+                            For some reason if you chose to do an alien page it would then create an extra selectbox and generate a incorrect html
+                            for (var i = 0; i < op.length; i++) {
+                                op[i].disabled = true;
+                            }**/
+                            match = true;
+            }}}}
+            //this will run once there are no more questions. It creates a button and a unique html link. It then logs the link in local storage
+            if (match != true){
+                myarray.push(pickedText);
+                var site = myarray.toString();
+                console.log(site);
+                var btn = document.createElement("BUTTON");
+                var t = document.createTextNode("CREATE MY SITE");
+                btn.onclick = function(){
+                    Local("html/"+site+".html");
+                    window.location.href="html/"+site+".html";
+                } 
+                btn.appendChild(t);
+                myDiv.appendChild(btn);
+            }
+        }
+
+    </script>
+    
+</body>
+    
+</html>
